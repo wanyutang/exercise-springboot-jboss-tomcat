@@ -1,0 +1,26 @@
+# docker-compose -f docker/docker-compose-nodejs.yml -f docker/docker-compose-mongo.yml config > docker/docker-compose-f3.yml
+# Use root/example as user/password credentials
+# docker push wanyutang/nodejs-website:alpine1.0
+version: "3.1"
+
+services:
+  tomcat-demo: #http://localhost:8080/demo/
+    container_name: tomcat-demo
+    build:
+      context: ./Docker-tomcat
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - ./target/demo-0.0.1-SNAPSHOT.war:/usr/local/tomcat/webapps/demo.war
+  jboss-demo: #http://localhost:8081/demo/
+    container_name: jboss-demo
+    build:
+      context: ./Docker-wildfly
+      dockerfile: DockerFile
+    restart: always
+    ports:
+      - 8081:8080
+    volumes:
+      - ./target/demo-0.0.1-SNAPSHOT.war:/opt/jboss/wildfly/standalone/deployments/demo.war
